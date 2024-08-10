@@ -1,0 +1,47 @@
+- name: Configurar servidores
+  hosts: servers
+  become: yes  
+  tasks:
+    - name: Actualizar cache de software de apt
+      apt:
+        update_cache: yes
+
+    - name: Instalar Apache
+      apt:
+        name: apache2
+        state: present
+
+    - name: Instalar cowsay
+      apt:
+        name: cowsay
+        state: present
+
+    - name: Crear archivo
+      file:
+        path: /tmp/archivo.txt
+        state: touch
+
+    - name: Copiar archivo al servidor
+      copy:
+        src: /mnt/c/Users/JhonAxell/Documents/archivo.txt  
+        dest: /tmp/archivo_cop.txt
+
+    - name: Crear carpeta
+      file:
+        path: /tmp/carpeta
+        state: directory
+
+    - name: Iniciar el servicio de Apache
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Agregar usuario al servidor
+      user:
+        name: nuevo_usuario
+        state: present
+        create_home: yes
+
+    - name: Ejecutar script en el servidor
+      command: /usr/bin/echo "Script ejecutado correctamente" > /tmp/resultado_script.txt
